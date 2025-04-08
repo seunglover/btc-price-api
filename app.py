@@ -6,16 +6,17 @@ app = Flask(__name__)
 
 @app.route("/get_btc_price", methods=["GET"])
 def get_btc_price():
-    url = "https://api.upbit.com/v1/ticker"
-    params = {"markets": "KRW-BTC"}
+    url = "https://api.bybit.com/v2/public/tickers"
+    params = {"symbol": "BTCUSDT"}  # 다른 코인: ETHUSDT, XRPUSDT 등
     res = requests.get(url, params=params)
 
     if res.status_code == 200:
-        data = res.json()[0]
+        data = res.json()["result"][0]
         return jsonify({
-            "price": data["trade_price"],
-            "change": round(data["signed_change_rate"] * 100, 2),
-            "volume": round(data["acc_trade_volume_24h"], 2)
+            "symbol": data["symbol"],
+            "price": float(data["last_price"]),
+            "change": float(data["percent_change_24h"]),
+            "volume": float(data["turnover_24h"])
         })
     else:
         return jsonify({"error": "시세 조회 실패"}), 500
