@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BTC Price Proxy</title>
+  <script>
+    async function fetchBTCPrice() {
+      try {
+        const response = await fetch("https://btc-price-api.onrender.com/get_btc_price");
+        const data = await response.json();
+        document.body.innerText = 
+          `PRICE: ${data.price}\n` +
+          `CHANGE: ${data.change}%\n` +
+          `VOLUME: ${data.volume.toLocaleString()} USDT`;
+      } catch (err) {
+        document.body.innerText = "ERROR";
+      }
+    }
+    window.onload = fetchBTCPrice;
+  </script>
+</head>
+<body>
+  Loading BTC data...
+</body>
+</html>
