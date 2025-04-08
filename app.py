@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_file
 import requests
 import os
 
@@ -8,7 +8,7 @@ app = Flask(__name__)
 def get_btc_price():
     url = "https://api.bybit.com/v5/market/tickers"
     params = {
-        "category": "linear",    # 선물 마켓
+        "category": "linear",  # 선물 마켓
         "symbol": "BTCUSDT"
     }
     res = requests.get(url, params=params)
@@ -23,6 +23,10 @@ def get_btc_price():
         })
     else:
         return jsonify({"error": "시세 조회 실패"}), 500
+
+@app.route("/")
+def serve_index():
+    return send_file("index.html")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
